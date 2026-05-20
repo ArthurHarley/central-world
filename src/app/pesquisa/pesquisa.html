@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="card">
+    <h1>Central World</h1>
+
+    <form [formGroup]="formPesquisa" (ngSubmit)="pesquisar()">
+
+      <div class="campo">
+        <label>Nome do País *</label>
+        <input
+          type="text"
+          formControlName="nome"
+          placeholder="Ex: Brazil"
+        />
+
+        <small
+          *ngIf="formPesquisa.get('nome')?.invalid &&
+                 formPesquisa.get('nome')?.touched"
+        >
+          Digite pelo menos 2 caracteres.
+        </small>
+      </div>
+
+      <button type="submit" [disabled]="formPesquisa.invalid || carregando">
+        {{ carregando ? 'Pesquisando...' : 'Pesquisar' }}
+      </button>
+    </form>
+
+    <!-- Resultado -->
+    <div class="resultado" *ngIf="pais">
+      <h2>{{ pais.name.common }}</h2>
+
+      <img
+        [src]="pais.flags.png"
+        [alt]="pais.name.common"
+        style="width: 100%; max-width: 250px; margin: 15px 0; border-radius: 8px;"
+      />
+
+      <p><strong>Capital:</strong> {{ pais.capital?.[0] || 'Não informado' }}</p>
+      <p><strong>Região:</strong> {{ pais.region }}</p>
+      <p><strong>Sub-região:</strong> {{ pais.subregion }}</p>
+      <p><strong>População:</strong> {{ pais.population | number }}</p>
+      <p><strong>Moedas:</strong> {{ moedas }}</p>
+      <p><strong>Idiomas:</strong> {{ idiomas }}</p>
+
+      <button type="button" (click)="novaPesquisa()">
+        Nova Pesquisa
+      </button>
+    </div>
+
+    <!-- Não encontrado -->
+    <div class="resultado" *ngIf="pesquisado && !pais">
+      <h2>País não encontrado</h2>
+
+      <button type="button" (click)="novaPesquisa()">
+        Nova Pesquisa
+      </button>
+    </div>
+  </div>
+</div>
